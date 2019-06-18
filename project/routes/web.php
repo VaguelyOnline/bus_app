@@ -14,10 +14,12 @@ use Illuminate\Http\Request;
 |
 */
 
+// Render the terminal for the bus driver
 Route::get('client', function () {
 	return view('client');
 });
 
+// API - retrieve the pupil data
 Route::get('pupils', function (Request $request) {
 
 	$routeNumber = $request->input('route');
@@ -25,6 +27,8 @@ Route::get('pupils', function (Request $request) {
     return Pupil::whereRouteNumber($routeNumber)->get();
 
 });
+
+
 
 
 
