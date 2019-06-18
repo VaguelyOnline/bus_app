@@ -1,0 +1,91 @@
+<html>
+	<head>
+		<title>
+			Bus Driver Terminal App
+		</title>
+		<style>
+			[v-cloak] {
+				display: none;
+			}
+			img {
+				max-width: 200px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="pupils" v-cloak>
+		
+			<h1>
+				Bus driver terminal app
+			</h1>
+
+			<select v-model="busNumber">
+				<option v-for="routeNumber in busRoutes">{{ routeNumber }}</option>
+			</select>
+
+			<h2>
+				Children - {{ pupils.length }} total
+			</h2>
+
+			<ol>
+				<li v-for="pupil in pupils">
+					{{ pupil.name }}
+					<button @click="toggleInfo(pupil)">Toggle info</button>
+					<button @click="checkin(pupil)">Check-in</button>
+					
+					<div v-if="pupil.showInfo">
+						<h3>
+							Additional Info
+						</h3>
+						<img :src="pupil.photo" :alt="'Picture of ' + pupil.name">
+					</div>
+				</li>
+			</ol>
+		</div>
+
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script>
+			
+
+			var busApp = new Vue({
+				el: '#pupils',
+				data: {
+					pupils: [],
+					busNumber: -1,		// The number of this bus
+					busRoutes: [
+						1, 2, 3, 17, 19, 23
+					]
+				},
+				watch: {
+					busNumber: function(routeNumber) {
+						var that = this;
+						axios
+							.get('/pupils?route=' + routeNumber)
+							.then(function (response) {
+								that.pupils = response.data;
+								that.$forceUpdate();
+							});
+					}
+				},
+				methods: {
+					toggleInfo: function (pupil) {
+						pupil.showInfo = !pupil.showInfo;
+					},
+
+					checkin: function (pupil) {
+						// Record pupils checkin for this bus...
+					}
+				}
+			});
+		</script>
+
+	</body>
+</html>
+
+
+
+
+
+
+
